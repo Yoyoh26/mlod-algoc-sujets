@@ -1,3 +1,4 @@
+#include <stdio.h>
 
 void echangeContenu(int *a, int *b) {
     int temp = *a;
@@ -6,14 +7,14 @@ void echangeContenu(int *a, int *b) {
 }
 
 int main() {
-    int x = 5;
-    int y = 10;
+    int a = 10;
+    int b = 20;
 
-    printf("Avant l'echange : x = %d, y = %d\n", x, y);
+    printf("Avant l'echange : a = %d, b = %d\n", a, b);
 
-    echangeContenu(&x, &y);
+    echangeContenu(&a, &b);
 
-    printf("Apres l'echange : x = %d, y = %d\n", x, y);
+    printf("Apres l'echange : a = %d, b = %d\n", a, b);
 
     return 0;
 }
