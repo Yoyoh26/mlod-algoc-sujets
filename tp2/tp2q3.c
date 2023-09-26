@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 //3a
-enum Mois {
+ typedef enum   {
     JANVIER,
     FEVRIER,
     MARS,
@@ -14,40 +14,45 @@ enum Mois {
     OCTOBRE,
     NOVEMBRE,
     DECEMBRE
-};
+} Mois;
 
-struct Date {
-    int jour;
-    enum Mois mois;
-    int annee;
-};
+ typedef struct   {
+    unsigned short jour;
+    Mois mois;
+    unsigned short annee;
+}  Date ;
 
 //3b
-int main1() {
-    struct Date d;
+int main() {
+    Date d;
     initialiseDate(&d);
     afficheDate(&d);
+    
+    /*Date d;
+    d=creerDateParCopie();
+    afficheDate(&d);*/
+
 }
 
-void initialiseDate(struct Date *date) {
+void initialiseDate(Date *date) {
     printf("Entrez le jour, le mois et l'année (séparés par des espaces) : ");
-    scanf("%d %d %d", &date->jour, &date->mois, &date->annee);
+    scanf("%d %d %d", &(date->jour), (int *)&(date->mois), &(date->annee));
 }
 
-void afficheDate(struct Date date) {
+void afficheDate( Date date) {
     printf("%d/%d/%d\n", date.jour, date.mois, date.annee);
 }
 
 //3c
 
-int main() {
-    struct Date d;
-    d=creerDateParCopie();
-    afficheDate(&d);
-}
-void creerDateParCopie() {
-    printf("Entrez le jour, le mois et l'année (séparés par des espaces) : ");
-    struct Date date;
-    scanf("%d %d %d", &date->jour, (int)&date->mois, &date->annee);
-    return date;
+Date creerDateParCopie() {
+    Date d;
+    initialiseDate(&d);
+    return d;
+} 
+
+Date* newDate() {
+    Date* d = (Date*)malloc(sizeof(Date));
+    initialiseDate(&d);
+    return d;
 }
