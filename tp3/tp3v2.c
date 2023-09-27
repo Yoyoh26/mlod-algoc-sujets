@@ -14,17 +14,9 @@ typedef struct {
 /*
 // Ouvrir le fichier d'entrée en mode lecture
 FILE *inputFile = fopen(filename, "r");
-if (inputFile == NULL) {
-    perror("Erreur lors de l'ouverture du fichier d'entrée");
-    return EXIT_FAILURE;
-}
 
 // Ouvrir le fichier de sortie en mode écriture
 FILE *outputFile = fopen(outputFilename, "w");
-if (outputFile == NULL) {
-    perror("Erreur lors de l'ouverture du fichier de sortie");
-    return EXIT_FAILURE;
-}
 
 fclose(inputFile);
 fclose(outputFile);
@@ -52,27 +44,12 @@ void readWinners(FILE *file, TuringWinner *winners, int numberOfWinners) {
 
         if (fgets(temp, sizeof(temp), file) != NULL &&
             sscanf(temp, "%d;%[^;];%[^\n]", &year, nameBuffer, researchBuffer) == 3) {
-
             winners[i].name = (char *)malloc((strlen(nameBuffer) + 1) * sizeof(char));
-            if (winners[i].name == NULL) {
-                perror("Erreur lors de l'allocation de mémoire");
-                exit(EXIT_FAILURE);
-            }
-
             winners[i].research = (char *)malloc((strlen(researchBuffer) + 1) * sizeof(char));
-            if (winners[i].research == NULL) {
-                perror("Erreur lors de l'allocation de mémoire");
-                exit(EXIT_FAILURE);
-            }
-
             strcpy(winners[i].name, nameBuffer);
             strcpy(winners[i].research, researchBuffer);
-
             winners[i].year = year;
-        } else {
-            perror("Erreur lors de la lecture du fichier");
-            exit(EXIT_FAILURE);
-        }
+        } 
     }
 }
 
@@ -83,16 +60,14 @@ void printWinners(FILE *file,  TuringWinner *winners, int numberOfWinners) {
 }
 
 void infosAnnee(int year) {
-    TuringWinner winners[57];
     FILE *inputFile = fopen("turingWinners.csv", "r");
-    if (inputFile == NULL) {
-        perror("Erreur lors de l'ouverture du fichier d'entrée");
-        return;
-    }
-    readWinners(inputFile, winners, 57);
+    int nombre = numberOfWinners(inputFile);
+    TuringWinner winners[nombre];
+    rewind(inputFile);
+    readWinners(inputFile, winners, nombre);
     fclose(inputFile);
 
-    for (int i = 0; i < 57; i++) {
+    for (int i = 0; i < nombre; i++) {
         if (winners[i].year == year) {
             printf("L'année %d, le(s) gagnant(s) ont été : %s\n", winners[i].year, winners[i].name);
             printf("Nature des travaux : %s\n", winners[i].research);
@@ -112,24 +87,10 @@ int compareTuringWinners(const void* a, const void* b) {
 
 void sortTuringWinnersByYear(const char* inputFilename, const char* outputFilename) {
     FILE* inputFile = fopen(inputFilename, "r");
-    if (inputFile == NULL) {
-        perror("Erreur lors de l'ouverture du fichier d'entrée");
-        return;
-    }
-
     int nb = numberOfWinners(inputFile);
-
     rewind(inputFile);
-
     TuringWinner* winners = (TuringWinner*)malloc(nb * sizeof(TuringWinner));
-    if (winners == NULL) {
-        perror("Erreur lors de l'allocation de mémoire");
-        fclose(inputFile);
-        return;
-    }
-
     char ligne[1024]; 
-
     int index = 0;
     while (fgets(ligne, sizeof(ligne), inputFile) != NULL) {
         char nameBuffer[256];
@@ -137,14 +98,6 @@ void sortTuringWinnersByYear(const char* inputFilename, const char* outputFilena
         if (sscanf(ligne, "%d;%255[^;];%511[^\n]", &winners[index].year, nameBuffer, researchBuffer) == 3) {
             winners[index].name = strdup(nameBuffer);
             winners[index].research = strdup(researchBuffer);
-
-            if (winners[index].name == NULL || winners[index].research == NULL) {
-                perror("Erreur lors de l'allocation de mémoire");
-                fclose(inputFile);
-                free(winners);
-                return;
-            }
-
             index++;
         }
     }
@@ -154,11 +107,6 @@ void sortTuringWinnersByYear(const char* inputFilename, const char* outputFilena
     qsort(winners, nb, sizeof(TuringWinner), compareTuringWinners);
 
     FILE* outputFile = fopen(outputFilename, "w");
-    if (outputFile == NULL) {
-        perror("Erreur lors de l'ouverture du fichier de sortie");
-        free(winners);
-        return;
-    }
 
     for (int i = 0; i < nb; i++) {
         fprintf(outputFile, "%d;%s;%s\n", winners[i].year, winners[i].name, winners[i].research);
@@ -175,7 +123,7 @@ void sortTuringWinnersByYear(const char* inputFilename, const char* outputFilena
 
 int main(int argc, char** argv) {
     char inputFilename[] = "turingWinners.csv";
-    char outputFilename[] = "sortedWinners2473.csv";
+    char outputFilename[] = "sortedWinners3.csv";
     int infoYear = 0;
     int shouldSort = 0;
 
@@ -225,28 +173,18 @@ int main(int argc, char** argv) {
     
     /*
     FILE *inputFile = fopen(inputFilename, "r");
-    if (inputFile == NULL) {
-        perror("Erreur lors de l'ouverture du fichier d'entrée");
-        return 1;
-    }
     
     int nombre = numberOfWinners(inputFile);
     fclose(inputFile);
     TuringWinner winners[nombre];
     
     inputFile = fopen(inputFilename, "r");
-    if (inputFile == NULL) {
-        perror("Erreur lors de l'ouverture du fichier d'entrée");
-        return 1;
-    }
+    
     readWinners(inputFile, winners, nombre);
     fclose(inputFile);
     
     FILE *outputFile = fopen(outputFilename, "w");
-    if (outputFile == NULL) {
-        perror("Erreur lors de l'ouverture du fichier de sortie");
-        return 1;
-    }
+    
     printWinners(outputFile, winners, nombre);
     fclose(outputFile);
     return 0;
