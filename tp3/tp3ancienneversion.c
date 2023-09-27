@@ -62,9 +62,9 @@ void printWinners(FILE *file,  TuringWinner *winners, int numberOfWinners) {
 
 int main(int argc, char** argv) {
     char inputFilename[] = "turingWinners.csv";
-    char outputFilename[] = "sortedWinners.csv";
+    char outputFilename[] = "sortedWinners222.csv";
 
-    
+    /*
     FILE *inputFile = fopen(inputFilename, "r");
     if (inputFile == NULL) {
         perror("Erreur lors de l'ouverture du fichier d'entrée");
@@ -90,7 +90,7 @@ int main(int argc, char** argv) {
     }
     printWinners(outputFile, winners, nombre);
     fclose(outputFile);
-    return 0;
+    return 0;*/
 
     //infosAnnee(1976);
     sortTuringWinnersByYear(inputFilename,outputFilename);
