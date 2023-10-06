@@ -26,7 +26,7 @@
 int main() {
     Date d;
     initialiseDate(&d);
-    afficheDate(&d);
+    afficheDate(d);    
     
     /*Date d;
     d=creerDateParCopie();

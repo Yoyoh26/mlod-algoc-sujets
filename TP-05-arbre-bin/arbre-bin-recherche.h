@@ -17,18 +17,18 @@ typedef struct noeud_s Noeud;
 typedef Noeud* ArbreBinaire;
 
 // retourne TRUE si a est l'arbre vide et FALSE sinon
-bool estVide(ArbreBinaire a);
+bool estVide(ArbreBinaire a) ;
 
 // initialise l'arbre a à l'arbre vide
-void initialiser(ArbreBinaire* a);
+void initialiser(ArbreBinaire* a) ;
 
 // créer un arbre contenant un seul noeud ayant la valeur e
-ArbreBinaire creer(Element e);
+ArbreBinaire creer(Element e) ;
 
 // insere e dans a sachant que a est un arbre binaire de recherche
 // si a contient déjà un element e, ce dernier n'est pas insérer afin d'éviter les doublons
 // version itérative
-ArbreBinaire insere_i(ArbreBinaire a, Element e);
+ArbreBinaire insere_i(ArbreBinaire a, Element e) ;
 
 // insere e dans a sachant que a est un arbre binaire de recherche
 // si a contient déjà un element e, ce dernier n'est pas insérer afin d'éviter les doublons

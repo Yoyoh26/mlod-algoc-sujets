@@ -71,7 +71,7 @@ int question3_2() {
 
 
 int main() {
-   question2();
+   question3();
 }
 
 
